@@ -1,76 +1,60 @@
 package com.humber.asgmnts;
-import java.text.DecimalFormat;
 import java.util.Scanner;
 
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+//Main class
+public class Assignment4 {
+ public static void main(String[] args) {
+     Scanner scanner = new Scanner(System.in);
 
-        // Input for account ID
-        System.out.print("Enter ID: ");
-        int accountId = scanner.nextInt();
+     // Get customer name
+     System.out.print("Enter customer name: ");
+     String customerName = scanner.nextLine();
+     Bill bill = new Bill(customerName);
 
-        // Create an instance of the Account class
-        Account account1 = new Account();
-        account1.setId(accountId);
-        
-        // Set the initial balance below
-        account1.setBalance(1000.0); 
+     while (true) {
+         // Display menu
+         System.out.println("Menu:");
+         System.out.println("1. Purchase a Book");
+         System.out.println("2. Display Bill");
+         System.out.println("3. Exit");
+         System.out.print("Enter your choice: ");
+         int choice = scanner.nextInt();
+         scanner.nextLine(); // Consume newline
 
-        int choice;
-        while (true) {
-            // Main menu options
-            System.out.println("Main menu");
-            System.out.println("1: Check for balance");
-            System.out.println("2: Withdraw");
-            System.out.println("3: Deposit");
-            System.out.println("4: Exit");
+         if (choice == 1) {
+             // Purchase a book
+             System.out.print("Enter book title: ");
+             String bookTitle = scanner.nextLine();
+             System.out.print("Enter book category (Fiction/NonFiction): ");
+             String category = scanner.nextLine();
 
-            // Input for user choice
-            System.out.print("Enter a choice: ");
-            choice = scanner.nextInt();
+             Book book;
+             if (category.equalsIgnoreCase("Fiction")) {
+                 book = new FictionBook(bookTitle);
+             } else if (category.equalsIgnoreCase("NonFiction")) {
+                 book = new NonFictionBook(bookTitle);
+             } else {
+                 System.out.println("Invalid category.");
+                 continue;
+             }
 
-            // Consume the newline character left in the buffer
-            scanner.nextLine();
+             bill.addBook(book);
+             System.out.println("Book added to the bill.");
+         } else if (choice == 2) {
+             // Display bill
+             bill.printBill();
+         } else if (choice == 3) {
+             // Exit
+             System.out.println("Exiting the application.");
+             break;
+         } else {
+             System.out.println("Invalid Choice.");
+         }
+         System.out.println(); // Blank line
+     
+     }
 
-            if (choice == 1) {
-                // Display balance
-                System.out.println("The balance is: $" + formatCurrency(account1.getBalance()));
-            } else if (choice == 2) {
-                // Withdraw
-                System.out.print("Enter the amount to withdraw: ");
-                double withdrawAmount = scanner.nextDouble();
-                if (withdrawAmount <= account1.getBalance()) {
-                    account1.setBalance(account1.getBalance() - withdrawAmount);
-                    System.out.println("Withdraw successful.");
-                } else {
-                    System.out.println("Insufficient balance for withdrawal.");
-                }
-            } else if (choice == 3) {
-                // Deposit
-                System.out.print("Enter the amount to deposit: ");
-                double depositAmount = scanner.nextDouble();
-                account1.setBalance(account1.getBalance() + depositAmount);
-                System.out.println("Deposit successful.");
-            } else if (choice == 4) {
-                // Exit
-                System.out.println("Exiting the program.");
-                // Exit the loop when choice is 4
-                break; 
-            } else {
-                System.out.println("Invalid choice. Please try again.");
-            }
-            // Add an empty line after each iteration, code below
-            System.out.println();
-        }
-
-        scanner.close();
-    }
-
-    // Helper method to format currency with two decimal places, found in google
-    private static String formatCurrency(double amount) {
-        DecimalFormat df = new DecimalFormat("#.00");
-        return df.format(amount);
-    }
+     scanner.close();
+ }
 }
